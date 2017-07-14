@@ -23,8 +23,7 @@ func Cli() {
 	var tasknum int
 
 	var body []byte
-	arg := flag.String("file", "",
-		"Usage: -file=name.ext")
+	arg := flag.String("file", "", "Usage: -file=name.ext")
 
 	arg2 := flag.Int("task", 0, "Usage: -task=1")
 
@@ -51,7 +50,19 @@ func Cli() {
 		r, _ := ioutil.ReadAll(resp.Body)
 		var a []Answer
 		json.Unmarshal(r, &a)
-		fmt.Println(a[1])
+		for i := 1; i <= 7; i++ {
+			for _, resp := range a {
+				if resp.Task == i {
+					if resp.Reason == "<nil>" {
+						fmt.Printf("\nTask: %d\n", i)
+						fmt.Println(resp.Resp)
+					} else {
+						fmt.Println(resp.Reason)
+					}
+
+				}
+			}
+		}
 	} else {
 		file, _ := readFile(filename)
 		m := make(map[int]interface{})
@@ -64,5 +75,4 @@ func Cli() {
 		fmt.Println(string(r))
 	}
 
-	fmt.Println(filename, tasknum)
 }
