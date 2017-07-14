@@ -1,0 +1,9 @@
+{
+"1": {"Width":10, "Height":5, "Symbol":"*"},
+"2": [{"Width":6.6,"Height":8.3}, {"Width":9.2,"Height":9.3}],
+"3": [{"Name":"ABC", "A":1,"B":2,"C":2},{"Name":"FGH", "A":4,"B":5,"C":6},{"Name":"GHJ", "A":3,"B":4,"C":3}],
+"4": {"Number":12121245},
+"5": {"Min":0, "Max":999999},
+"6": {"Length":10, "MaxSquare":25},
+"7": {"File":"context"}
+}
