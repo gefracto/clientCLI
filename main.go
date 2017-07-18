@@ -1,9 +1,15 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/gefracto/clientCLI/src/cli"
 )
 
 func main() {
-	cli.Cli()
+	if res, err := cli.Cli(); err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(res)
+	}
 }
