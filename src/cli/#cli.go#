@@ -1,0 +1,76 @@
+package cli
+
+import (
+	"bytes"
+	"encoding/json"
+	"flag"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+
+	"github.com/gefracto/kostrika-go-tasks/src/server"
+)
+
+type Answer server.Answer
+
+func readFile(fileName string) ([]byte, error) {
+	contents, err := ioutil.ReadFile(fileName)
+	return contents, err
+}
+
+func Cli() {
+	var filename string
+	var tasknum int
+
+	var body []byte
+	arg := flag.String("file", "", "Usage: -file=name.ext")
+
+	arg2 := flag.Int("task", 0, "Usage: -task=1")
+
+	flag.Parse()
+	filename, tasknum = *arg, *arg2
+
+	for {
+		if filename != "" {
+			fmt.Println("success :)")
+			break
+		}
+		fmt.Println("fail :(")
+		var input string
+		fmt.Print("Please enter filename: ")
+		fmt.Scanln(&input)
+		filename = input
+
+	}
+
+	if tasknum == 0 {
+		body, _ = readFile(filename)
+		resp, _ := http.Post("http://localhost:1111/tasks", "application/json", bytes.NewBuffer(body))
+		r, _ := ioutil.ReadAll(resp.Body)
+		var a []Answer
+		json.Unmarshal(r, &a)
+		for i := 1; i <= 7; i++ {
+			for _, resp := range a {
+				if resp.Task == i {
+					if resp.Reason == "<nil>" {
+						fmt.Printf("\nTask: %d\n", i)
+						fmt.Println(resp.Resp)
+					} else {
+						fmt.Println(resp.Reason)
+					}
+
+				}
+			}
+		}
+	} else {
+		file, _ := readFile(filename)
+		m := make(map[int]interface{})
+		_ = json.Unmarshal(file, &m)
+		body, _ = json.Marshal(m[tasknum])
+		target := fmt.Sprintf("http://localhost:1111/task/%d", tasknum)
+		resp, _ := http.Post(target, "application/json", bytes.NewBuffer(body))
+		r, _ := ioutil.ReadAll(resp.Body)
+		fmt.Println(string(r))
+	}
+
+}
