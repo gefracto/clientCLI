@@ -3,6 +3,7 @@ package cli
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -50,6 +51,8 @@ func sortTasks(a []Answer) (result string) {
 }
 
 func dosingletask(file string, port string, tasknum int) (string, error) {
+	var a Answer
+	//var result string
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
 		return "", err
@@ -62,8 +65,18 @@ func dosingletask(file string, port string, tasknum int) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	result, err := ioutil.ReadAll(response.Body)
-	return string(result), err
+	resp, err := ioutil.ReadAll(response.Body)
+	json.Unmarshal(resp, &a)
+	if err != nil {
+		return "", err
+	}
+
+	if a.Reason == "<nil>" {
+		return a.Resp, nil
+
+	}
+
+	return a.Resp, errors.New(a.Reason)
 }
 
 func doalltasks(body []byte, port string) (string, error) {
