@@ -7,9 +7,8 @@ import (
 )
 
 func main() {
-	if res, err := cli.Cli(); err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(res)
-	}
+	res, err := cli.Cli()
+	fmt.Println("Reason: " + fmt.Sprint(err))
+	fmt.Println("Result:\n" + res)
+
 }

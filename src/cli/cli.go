@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/gefracto/kostrika-go-tasks/src/server"
 )
@@ -60,7 +61,7 @@ func dosingletask(file string, port string, tasknum int) (string, error) {
 	datamap := make(map[int]interface{})
 	json.Unmarshal(data, &datamap)
 	body, _ := json.Marshal(datamap[tasknum])
-	addr := fmt.Sprintf(target+port+"/task/%d", tasknum)
+	addr := target + port + "/task/" + strconv.Itoa(tasknum)
 	response, err := http.Post(addr, "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		return "", err
