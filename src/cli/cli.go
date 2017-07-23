@@ -17,7 +17,7 @@ type Answer server.Answer
 
 const alltasks int = 0
 const taskscount int = 7
-const target string = "http://localhost:"
+const target string = "http://kostrika-go.herokuapp.com"
 
 func getFilename(filename string) string {
 	file := filename
@@ -100,10 +100,10 @@ func doalltasks(body []byte, port string) (string, error) {
 
 func Cli() (string, error) {
 	var file string
+
 	filename := flag.String("file", "", "-file=name.ext")
 	tasknum := flag.Int("task", 0, "-task=1")
-	port := flag.String("port", "1111", "-port=1111")
-
+	port := flag.String("port", "", "-port=1111")
 	flag.Parse()
 
 	if *filename == "" {
